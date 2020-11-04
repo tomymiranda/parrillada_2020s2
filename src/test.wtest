@@ -1,3 +1,73 @@
 import comidas.*
 import comensales.*
 import cocina.*
+
+test "Valoración de la Hambruguesa de Carne con pan casero es 80"{
+	
+	const hamburguesa = new HamburguesaCarne(pan = panCasero)
+	assert.equals(80,hamburguesa.valoracion())
+
+}
+
+test"Valoración de la Hambruguesa Vegetariana, con pan de masaMadre y de garbanzos como legumbre es 122"{
+	const veggie = new HamburguesaVegetariana(pan = panMasaMadre,legumbreHecha = "garbanzos")
+	assert.equals(122,veggie.valoracion())
+}
+
+test"Parillada, que incluya un asado, de calidad 10 y peso 250 gramos, una entraña, de calidad 7 y peso 200 gramos y un chorizo, de calidad 8 y peso 50 gramos su valoracion es de 147"{
+	const asado = new Corte(nombre="asado",calidad = 10,peso = 250)
+	const entrania = new Corte(nombre="entrania",calidad = 7,peso = 200)
+	const chorizo = new Corte(nombre="chorizo",calidad = 8,peso = 50)
+	
+	const parri = new Parrillada(cortesDeLaParrillada = [asado,entrania,chorizo])
+	
+	assert.equals(147,parri.valoracion())
+}
+
+test "Provoleta, de peso 190 y con especias. El resultado de ser especial es: true"{
+	const provo = new Provoleta(peso=190,tieneEspecias = true)
+	assert.that(provo.esEspecial())
+}
+
+test "Un vegetariano de peso 68500 gramos come una provoleta de 190 gramos con especias y dos Hamburguesas Vegetarianas (250 grs cada una) con pan de masaMadre y de garbanzos como legumbre. El resultado si esta satisfecho es true"{
+	const vege = new ComensalVegetariano(peso=68500)
+	const provo = new Provoleta(peso=190,tieneEspecias = true)
+	const veggie = new HamburguesaVegetariana(pan = panMasaMadre,legumbreHecha = "garbanzos")
+	const veggie2 = new HamburguesaVegetariana(pan = panMasaMadre,legumbreHecha = "garbanzos")
+	
+	vege.comer(provo)
+	vege.comer(veggie)
+	vege.comer(veggie2)
+	
+	assert.that(vege.satisfecho())
+}
+
+test"Un comensal popular de peso 85000 gramos come una parrillada que incluye un asado, de calidad 10 y peso 250 gramos, una entraña, de calidad 7 y peso 200 gramos y un chorizo, de calidad 8 y peso 50 gramos. El resultado si esta satisfecho es: False"{
+	
+	const humano = new ComensalPopular(peso=85000)
+	
+	const asado = new Corte(nombre="asado",calidad = 10,peso = 250)
+	const entrania = new Corte(nombre="entrania",calidad = 7,peso = 200)
+	const chorizo = new Corte(nombre="chorizo",calidad = 8,peso = 50)
+	
+	const parri = new Parrillada(cortesDeLaParrillada = [asado,entrania,chorizo])
+	
+	humano.comer(parri)
+	
+	assert.notThat(humano.satisfecho())
+}
+
+test"Un comensal de paladar fino le agrada comer una Hamburguesa de carne de 250 gramos con pan de masa madre"{
+	const hamburguesa = new HamburguesaCarne(pan = panMasaMadre)
+	const fino = new ComensalPaladarFino(peso= 30000)
+	
+	assert.that(fino.leAgrada(hamburguesa))
+}
+
+test"Un comensal de paladar fino NO agrada comer una Hamburguesa de carne de 250 gramos con pan casero"{
+	const fino = new ComensalPaladarFino(peso= 30000)
+	const hamburguesa = new HamburguesaCarne(pan = panCasero)
+	
+	assert.notThat(fino.leAgrada(hamburguesa))
+	
+}
